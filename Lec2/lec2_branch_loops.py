@@ -106,42 +106,22 @@
 #        mysum += 1
 # print(mysum)
 
-#####################
-## Finger Exercise ##
-#####################
-
-# Ask the user for three integers
-x = int(input("Enter the first number: "))
-y = int(input("Enter the second number: "))
-z = int(input("Enter the third number: "))
-
-# Determine the largest odd in list of x, y, z
-largest_odd = 0
-for i in [x, y, z]:
-    if i % 2 == 1 and i > largest_odd:
-        largest_odd = i
-
-# Print the largest odd, or if there's no odds
-if largest_odd != 0:
-    print(largest_odd)
-else:
-    print("None of these numbers are odd")
-
-
 ####################
 ## EXAMPLE: perfect squares
 ####################
-#ans = 0
-#neg_flag = False
-#x = int(input("Enter an integer: "))
-#if x < 0:
-#    neg_flag = True
-#while ans**2 < x:
-#    ans = ans + 1
-#if ans**2 == x:
-#    print("Square root of", x, "is", ans)
-#else:
-#    print(x, "is not a perfect square")
+ans = 0
+# neg_flag = False
+x = int(input("Enter an integer: "))
+if x < 0:
+   neg_flag = True
+while ans**2 < abs(x):
+   ans = ans + 1
+if ans**2 == x:
+   print("Square root of", x, "is", ans)
+elif ans**2*(-1) == x:
+    print("Square root of", x, "is " + str(ans) + "i")
+else:
+    print(x, "is not a perfect square")
 #    if neg_flag:
 #        print("Just checking... did you mean", -x, "?")
 
