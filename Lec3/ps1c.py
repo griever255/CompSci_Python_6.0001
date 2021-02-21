@@ -23,16 +23,16 @@ while abs(current_savings - total_cost*portion_down_payment) >= epsilon:
     monthly_salary = annual_salary/12
     monthly_savings = monthly_salary*portion_saved/10000
     for month in range(36):
-        current_savings += current_savings*r/12 + monthly_savings
         if month % 6 == 0 and month != 0:
             monthly_salary *= 1+semi_annual_raise
             monthly_savings = monthly_salary*portion_saved/10000
+        current_savings += current_savings*r/12 + monthly_savings
     if current_savings > total_cost*portion_down_payment:
         high = portion_saved
     else:
         low = portion_saved
-    portion_saved = round((high+low)/2.0,0)
-    if portion_saved == 10000:
+    portion_saved = int(high+low)/2.0
+    if portion_saved == 9999:
         notPossible = True
         break
     numSteps += 1
