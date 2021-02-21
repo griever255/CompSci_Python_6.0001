@@ -40,6 +40,6 @@ while abs(current_savings - total_cost*portion_down_payment) >= epsilon:
 if notPossible:
     print("It is not possible to pay the down payment in three years.")
 else:
-    print("Best savings rate:", round(portion_saved/10000,4))
+    print("Best savings rate:", portion_saved/10000)
     print("Steps in bisection search:", numSteps)
 
