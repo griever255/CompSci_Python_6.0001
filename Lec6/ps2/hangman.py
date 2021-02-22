@@ -60,11 +60,11 @@ def is_word_guessed(secret_word, letters_guessed):
     returns: boolean, True if all the letters of secret_word are in letters_guessed;
       False otherwise
     '''
-    
-    guessed = False
+
+    guessed = True
     for i in range(len(secret_word)):
       if secret_word[i] in letters_guessed:
-        guessed = True
+        guessed *= True
       else:
         guessed *= False
     return guessed
