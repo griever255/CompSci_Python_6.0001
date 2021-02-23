@@ -63,9 +63,7 @@ def is_word_guessed(secret_word, letters_guessed):
 
     guessed = True
     for i in range(len(secret_word)):
-      if secret_word[i] in letters_guessed:
-        guessed *= True
-      else:
+      if secret_word[i] not in letters_guessed:
         guessed *= False
     return guessed
 
@@ -219,7 +217,7 @@ def hangman(secret_word):
 
 # -----------------------------------
 
-test = "t_ _ t"
+
 
 def match_with_gaps(my_word, other_word):
     '''
@@ -230,16 +228,21 @@ def match_with_gaps(my_word, other_word):
     _ , and my_word and other_word are of the same length;
     False otherwise: 
     '''
+    match = True
+    guessed_word = my_word.replace(" ","") # Remove spaces
+    if len(guessed_word) == len(other_word): # Test to see if they're the same length
+      for c in range(len(guessed_word)): # For each letter in guessed word
+        if guessed_word[c] == other_word[c]: 
+            pass # If the letters match, do nothing
+        elif guessed_word[c] == "_": # If the letter is blank
+          if other_word[c] in guessed_word: # Check to make sure it wasn't guessed
+            match = False # If it was guessed, return False
+        else:
+            match = False # If the letters don't match, return False
+    else:
+       match = False # Ff they're not the same length, return False
+    return match
 
-    my_word = list(my_word)
-    temp_word = my_word[:]
-    for c in temp_word:
-      if c == " ":
-        my_word.remove(c)
-    other_word = list(other_word)
-    
-  
-print(match_with_gaps(test, "text"))
 
 def show_possible_matches(my_word):
     '''
@@ -251,10 +254,12 @@ def show_possible_matches(my_word):
              that has already been revealed.
 
     '''
-    # FILL IN YOUR CODE HERE AND DELETE "pass"
-    pass
-
-
+    possible_matches = ""
+    for word in wordlist:
+      if match_with_gaps(my_word, word):
+        possible_matches += " " + word
+    print(possible_matches.strip())
+    
 
 def hangman_with_hints(secret_word):
     '''
@@ -337,6 +342,8 @@ def hangman_with_hints(secret_word):
             guesses -= 2
           else:
             guesses -= 1
+      elif guess == "*":
+        show_possible_matches(get_guessed_word(secret_word, letters_guessed))
       else: 
         warnings -= 1
         if warnings == 0:
@@ -367,14 +374,14 @@ if __name__ == "__main__":
     # To test part 2, comment out the pass line above and
     # uncomment the following two lines.
     
-    secret_word = "apples" # choose_word(wordlist)
-    hangman(secret_word)
+    # secret_word = "apples" # choose_word(wordlist)
+    # hangman(secret_word)
 
 ###############
     
     # To test part 3 re-comment out the above lines and 
     # uncomment the following two lines. 
     
-    # secret_word = "apples" # choose_word(wordlist)
-    # hangman_with_hints(secret_word)
-    pass
+    secret_word = choose_word(wordlist)
+    hangman_with_hints(secret_word)
+
