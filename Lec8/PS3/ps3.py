@@ -396,7 +396,6 @@ def play_game(word_list):
             else:
                 break  
     
-    global total_score 
     total_score = 0
     while total_hands > 0:
         hand = deal_hand(HAND_SIZE)
