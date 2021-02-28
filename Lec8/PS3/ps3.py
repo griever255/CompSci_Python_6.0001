@@ -300,9 +300,7 @@ def play_hand(hand, word_list):
                 print("That is not a valid word. Please choose another word.")
             # update the user's hand by removing the letters of their inputted word
             hand = update_hand(hand, word)
-
-    global total_score 
-    total_score += hand_score      
+ 
     # Game is over (user entered '!!' or ran out of letters),
     # so tell user the total score
     # Return the total score as result of function
@@ -310,14 +308,10 @@ def play_hand(hand, word_list):
         print(f"Ran out of letters. \n Total score for this hand: {hand_score} points")
     else:
         print(f"Total score for this hand: {hand_score} points")
-
+    return hand_score
 
 #
 # Problem #6: Playing a game
-# 
-
-
-#
 # procedure you will use to substitute a letter in a hand
 #
 
@@ -435,8 +429,7 @@ def play_game(word_list):
             print(f"Current hand:", end = " ")
             display_hand(hand)
 
-        play_hand(hand, word_list)
-        prev_score = total_score
+        first_score = play_hand(hand, word_list)
         while True:
             try:
                 replay = str(input("-----------------\nWould you like to replay that hand?: ")).lower()
@@ -448,15 +441,14 @@ def play_game(word_list):
                 else:
                     print("Invalid input, expected (yes/no)")
         if replay == "yes":
-            play_hand(hand, word_list)
-            if total_score < prev_score:
-                total_score = prev_score
+            replay_score = play_hand(hand, word_list)
+            if replay_score > first_score:
+                total_score += replay_score
+            else:
+                total_score += first_score
         total_hands -= 1
     print(f"-----------------\nTotal score over all hands: {total_score}")
         
-
-
-
 #
 # Build data structures used for entire session and play game
 # Do not remove the "if __name__ == '__main__':" line - this code is executed
