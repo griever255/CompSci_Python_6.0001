@@ -445,6 +445,8 @@ def play_game(word_list):
                 total_score += replay_score
             else:
                 total_score += first_score
+        else:
+            total_score += first_score
         total_hands -= 1
     print(f"-----------------\nTotal score over all hands: {total_score}")
         
