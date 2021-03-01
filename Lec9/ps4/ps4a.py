@@ -24,18 +24,16 @@ def get_permutations(sequence):
     '''
     # Base case if sequence is a single character, there's only 1 way to order it
     if len(sequence) == 1:
-        return [sequence]                           # return a singleton list containing sequence
+        return [sequence]                             # return a singleton list containing sequence
     # Recursive case
     else:
-        output_list = []                            # Initialize the list of output permutations
-        first_char = sequence[0]                    # Hold out the first character
-        permlist = get_permutations(sequence[1:])   # List of all permutation of remaining letters
-        for perm in permlist:                       # For each permutation string
-            for i in range(len(sequence)):          # Step through the index,
-                plist = list(perm)                  # first convert to a list, then
-                plist.insert(i, first_char)         # insert the first letter at each index
-                pstring = "".join(plist)            # then convert back to a string
-                output_list.append(pstring)         # and add the string to the output list of permutations
+        output_list = []                              # Initialize the list of output permutations
+        first_char = sequence[0]                      # Hold out the first character
+        permlist = get_permutations(sequence[1:])     # List of all permutation of remaining letters
+        for p in permlist:                            # For each permutation in the list
+            for i in range(len(sequence)):            # Step through each index of the sequence
+                perm = f"{p[:i]}{first_char}{p[i:]}"  # Insert the first char at index location
+                output_list.append(perm)              # and add the string to the output list of permutations
         return sorted(output_list)
             
 
