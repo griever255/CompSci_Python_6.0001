@@ -28,11 +28,10 @@ def get_permutations(sequence):
     # Recursive case
     else:
         output_list = []                              # Initialize the list of output permutations
-        first_char = sequence[0]                      # Hold out the first character
-        permlist = get_permutations(sequence[1:])     # List of all permutation of remaining letters
-        for p in permlist:                            # For each permutation in the list
+        first_char = sequence[0]                      # Hold out the first character                        
+        for p in get_permutations(sequence[1:]):      # For each p in the list of permutations
             for i in range(len(sequence)):            # Step through each index of the sequence
-                perm = f"{p[:i]}{first_char}{p[i:]}"  # Insert the first char at index location
+                perm = f"{p[:i]}{first_char}{p[i:]}"  # Insert the first character at index location
                 output_list.append(perm)              # and add the string to the output list of permutations
         return sorted(output_list)
             
