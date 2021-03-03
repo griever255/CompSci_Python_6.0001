@@ -222,14 +222,16 @@ class CiphertextMessage(Message):
         and the decrypted message text using that shift value
         '''
         best_guess = (0, self.apply_shift(0))   # Initialze best guess as encrypted string
+        best_valid_words = 0
         for s in range(0,27):                   # For each shift value 0-26
             num_valid_words = 0
             guess = self.apply_shift(26-s)      # Shift encrypted word by 26-s
             words = guess.split()               # Create a list of words
             for word in words:                  # Loop through each word
                 if is_word(self.valid_words, word):     # Return True if the word is in wordlist
-                    num_valid_words += 1            # Count # of valid words
-            if num_valid_words > best_guess[0]:     # If decrypted words are greater than other guesses
+                    num_valid_words += 1                # Count # of valid words
+            if num_valid_words > best_valid_words:      # If decrypted words are greater than other guesses
+                best_valid_words = num_valid_words
                 best_guess = (26-s, guess)      # Save 26-s and decrypted word as the best guess
         return best_guess
 
