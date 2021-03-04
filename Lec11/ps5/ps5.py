@@ -10,7 +10,7 @@ import threading
 from project_util import translate_html
 from mtTkinter import *
 from datetime import datetime
-# import pytz
+import pytz
 
 
 #-----------------------------------------------------------------------
@@ -39,8 +39,8 @@ def process(url):
         try:
             pubdate = datetime.strptime(pubdate, "%a, %d %b %Y %H:%M:%S %Z")
             pubdate.replace(tzinfo=pytz.timezone("GMT"))
-          #  pubdate = pubdate.astimezone(pytz.timezone('EST'))
-          #  pubdate.replace(tzinfo=None)
+            pubdate = pubdate.astimezone(pytz.timezone('EST'))
+            pubdate.replace(tzinfo=None)
         except ValueError:
             pubdate = datetime.strptime(pubdate, "%a, %d %b %Y %H:%M:%S %z")
 
@@ -118,7 +118,7 @@ class PhraseTrigger(Trigger):
             if phrase_words[0] == body_word:
                 for i in range(len(phrase_words)):
                     try:
-                        if body_words[body_index + i] == phrase_words[i]:
+                        if body_words[body_index+i] == phrase_words[i]:
                             phrase_in = True
                         else:
                             phrase_in = False
@@ -126,9 +126,6 @@ class PhraseTrigger(Trigger):
                         phrase_in = False
             body_index += 1
         return phrase_in
-    
-PT = PhraseTrigger("purple COW")
-print(PT.is_phrase_in("purple cows"))
 
 # Problem 3
 # TitleTrigger
@@ -159,25 +156,90 @@ class DescriptionTrigger(PhraseTrigger):
 # TIME TRIGGERS
 
 # Problem 5
-# TODO: TimeTrigger
+# TimeTrigger
+class TimeTrigger(Trigger):
 # Constructor:
 #        Input: Time has to be in EST and in the format of "%d %b %Y %H:%M:%S".
 #        Convert time from string to a datetime before saving it as an attribute.
+    def __init__(self, date):
+        try:
+            self.pubdate = datetime.strptime(date, "%d %b %Y %H:%M:%S")
+            self.pubdate = self.pubdate.astimezone(pytz.timezone('EST'))
+        except ValueError:
+            self.pubdate = datetime.strptime(date, "%d %b %Y %H:%M:%S")
+    
+    def get_pubdate(self):
+        return self.pubdate
 
 # Problem 6
-# TODO: BeforeTrigger and AfterTrigger
+# BeforeTrigger and AfterTrigger
+class BeforeTrigger(TimeTrigger):
+    def evaluate(self, story):
+        story_pubdate = story.get_pubdate().astimezone(pytz.timezone('EST'))
+        return self.get_pubdate() > story_pubdate
 
+class AfterTrigger(TimeTrigger):
+    def evaluate(self, story):
+        story_pubdate = story.get_pubdate().astimezone(pytz.timezone('EST'))
+        return self.get_pubdate() < story_pubdate
+
+TT = BeforeTrigger("12 Oct 2016 17:00:10")
 
 # COMPOSITE TRIGGERS
 
 # Problem 7
-# TODO: NotTrigger
+# NotTrigger
+class NotTrigger(Trigger):
+    def __init__(self, T):
+        self.T = T
+
+    def get_T(self):
+        return self.T
+
+    def get_story(self):
+        return self.story
+
+    def evaluate(self, story):
+        return not self.get_T().evaluate(story)
+
 
 # Problem 8
-# TODO: AndTrigger
+# AndTrigger
+class AndTrigger(Trigger):
+    def __init__(self, T1, T2):
+        self.T1 = T1
+        self.T2 = T2
+
+    def get_T1(self):
+        return self.T1
+
+    def get_T2(self):
+        return self.T2
+
+    def get_story(self):
+        return self.story
+
+    def evaluate(self, story):
+        return self.get_T1().evaluate(story) and self.get_T2().evaluate(story)
 
 # Problem 9
-# TODO: OrTrigger
+# OrTrigger
+class OrTrigger(Trigger):
+    def __init__(self, T1, T2):
+        self.T1 = T1
+        self.T2 = T2
+
+    def get_T1(self):
+        return self.T1
+
+    def get_T2(self):
+        return self.T2
+
+    def get_story(self):
+        return self.story
+
+    def evaluate(self, story):
+        return self.get_T1().evaluate(story) or self.get_T2().evaluate(story)
 
 
 #======================
@@ -276,7 +338,7 @@ def main_thread(master):
             stories = process("http://news.google.com/news?output=rss")
 
             # Get stories from Yahoo's Top Stories RSS news feed
-            stories.extend(process("http://news.yahoo.com/rss/topstories"))
+            # stories.extend(process("http://news.yahoo.com/rss/topstories"))
 
             stories = filter_stories(stories, triggerlist)
 

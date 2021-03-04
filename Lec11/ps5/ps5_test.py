@@ -116,8 +116,8 @@ class ProblemSet5(unittest.TestCase):
 
     def test3altBeforeAndAfterTrigger(self):
 
-        dt = timedelta(seconds=5)
-        now = datetime(2016, 10, 12, 23, 59, 59)
+        dt = timedelta(seconds=3600)
+        now = datetime.now()
         now = now.replace(tzinfo=pytz.timezone("EST"))
         
         ancient_time = datetime(1987, 10, 15)
@@ -132,8 +132,8 @@ class ProblemSet5(unittest.TestCase):
         future = NewsStory('', '', '', '', future_time)
 
 
-        s1 = BeforeTrigger('12 Oct 2016 23:59:59')
-        s2 = AfterTrigger('12 Oct 2016 23:59:59')
+        s1 = BeforeTrigger('3 Mar 2021 23:50:00')
+        s2 = AfterTrigger('3 Mar 2021 23:50:00')
 
         self.assertTrue(s1.evaluate(ancient), "BeforeTrigger failed to fire on news from long ago")
         self.assertTrue(s1.evaluate(just_now), "BeforeTrigger failed to fire on news happened right before specified time")
@@ -149,15 +149,15 @@ class ProblemSet5(unittest.TestCase):
 
     def test3BeforeAndAfterTrigger(self):
 
-        dt = timedelta(seconds=5)
-        now = datetime(2016, 10, 12, 23, 59, 59)
+        dt = timedelta(seconds=3600)
+        now = datetime.now()
         ancient = NewsStory('', '', '', '', datetime(1987, 10, 15))
         just_now = NewsStory('', '', '', '', now - dt)
         in_a_bit = NewsStory('', '', '', '', now + dt)
         future = NewsStory('', '', '', '', datetime(2087, 10, 15))
 
-        s1 = BeforeTrigger('12 Oct 2016 23:59:59')
-        s2 = AfterTrigger('12 Oct 2016 23:59:59')
+        s1 = BeforeTrigger('3 Mar 2021 23:50:00')
+        s2 = AfterTrigger('3 Mar 2021 23:50:00')
 
         self.assertTrue(s1.evaluate(ancient), "BeforeTrigger failed to fire on news from long ago")
         self.assertTrue(s1.evaluate(just_now), "BeforeTrigger failed to fire on news happened right before specified time")
