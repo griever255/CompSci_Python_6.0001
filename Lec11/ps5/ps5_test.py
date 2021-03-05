@@ -132,8 +132,8 @@ class ProblemSet5(unittest.TestCase):
         future = NewsStory('', '', '', '', future_time)
 
 
-        s1 = BeforeTrigger('3 Mar 2021 23:50:00')
-        s2 = AfterTrigger('3 Mar 2021 23:50:00')
+        s1 = BeforeTrigger('4 Mar 2021 19:36:00')
+        s2 = AfterTrigger('4 Mar 2021 19:36:00')
 
         self.assertTrue(s1.evaluate(ancient), "BeforeTrigger failed to fire on news from long ago")
         self.assertTrue(s1.evaluate(just_now), "BeforeTrigger failed to fire on news happened right before specified time")
@@ -156,8 +156,8 @@ class ProblemSet5(unittest.TestCase):
         in_a_bit = NewsStory('', '', '', '', now + dt)
         future = NewsStory('', '', '', '', datetime(2087, 10, 15))
 
-        s1 = BeforeTrigger('3 Mar 2021 23:50:00')
-        s2 = AfterTrigger('3 Mar 2021 23:50:00')
+        s1 = BeforeTrigger('4 Mar 2021 19:36:00')
+        s2 = AfterTrigger('4 Mar 2021 19:36:00')
 
         self.assertTrue(s1.evaluate(ancient), "BeforeTrigger failed to fire on news from long ago")
         self.assertTrue(s1.evaluate(just_now), "BeforeTrigger failed to fire on news happened right before specified time")

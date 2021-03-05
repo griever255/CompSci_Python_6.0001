@@ -253,10 +253,16 @@ def filter_stories(stories, triggerlist):
 
     Returns: a list of only the stories for which a trigger in triggerlist fires.
     """
-    # TODO: Problem 10
+    # Problem 10
     # This is a placeholder
     # (we're just returning all the stories, with no filtering)
-    return stories
+
+    filtered_stories = []
+    for trigger in triggerlist:
+        for story in stories:
+            if trigger.evaluate(story):
+                filtered_stories.append(story)
+    return filtered_stories
 
 
 
@@ -280,12 +286,40 @@ def read_trigger_config(filename):
         if not (len(line) == 0 or line.startswith('//')):
             lines.append(line)
 
-    # TODO: Problem 11
+    # Problem 11
     # line is the list of lines that you need to parse and for which you need
     # to build triggers
+    # print(lines) # for now, print it so you see what it contains!
+    # ['t1,TITLE,election', 't2,DESCRIPTION,Trump', 't3,DESCRIPTION,Clinton', 
+    # 't4,AFTER,3 Oct 2016 17:00:10', 't5,AND,t2,t3', 't6,AND,t1,t4', 'ADD,t5,t6']
 
-    print(lines) # for now, print it so you see what it contains!
+    trigger_names = {
+        "TITLE": TitleTrigger, 
+        "DESCRIPTION": DescriptionTrigger,
+        "AFTER": AfterTrigger,
+        "BEFORE": BeforeTrigger,
+        "NOT": NotTrigger,
+        "AND": AndTrigger,
+        "OR": OrTrigger
+        }
 
+    Triggers = {}
+    trigger_list = []
+    for line in lines:
+        args = line.split(",")
+        if args[0] != "ADD":
+            if len(args) == 3:
+                key = args[0]
+                value = trigger_names.get(args[1])(args[2])
+                Triggers.update({key:value})
+            elif len(args) == 4:
+                key = args[0]
+                value = trigger_names.get(args[1])(Triggers.get(args[2]),Triggers.get(args[3]))
+                Triggers.update({key:value})
+        elif args[0] == "ADD":
+            for i in range(len(args)-1):
+                trigger_list.append(Triggers.get(args[1+i]))
+    return trigger_list
 
 
 SLEEPTIME = 120 #seconds -- how often we poll
@@ -294,15 +328,15 @@ def main_thread(master):
     # A sample trigger list - you might need to change the phrases to correspond
     # to what is currently in the news
     try:
-        t1 = TitleTrigger("election")
-        t2 = DescriptionTrigger("Trump")
-        t3 = DescriptionTrigger("Clinton")
-        t4 = AndTrigger(t2, t3)
-        triggerlist = [t1, t4]
+        # t1 = TitleTrigger("election")
+        # t2 = DescriptionTrigger("Trump")
+        # t3 = DescriptionTrigger("Clinton")
+        # t4 = AndTrigger(t2, t3)
+        # triggerlist = [t1, t4]
 
         # Problem 11
-        # TODO: After implementing read_trigger_config, uncomment this line 
-        # triggerlist = read_trigger_config('triggers.txt')
+        # After implementing read_trigger_config, uncomment this line 
+        triggerlist = read_trigger_config('triggers.txt')
         
         # HELPER CODE - you don't need to understand this!
         # Draws the popup window that displays the filtered stories
@@ -339,7 +373,7 @@ def main_thread(master):
 
             # Get stories from Yahoo's Top Stories RSS news feed
             # stories.extend(process("http://news.yahoo.com/rss/topstories"))
-
+            print(triggerlist)
             stories = filter_stories(stories, triggerlist)
 
             list(map(get_cont, stories))
